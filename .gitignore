@@ -1,0 +1,17 @@
+node_modules
+dist/
+test-results/
+playwright-report/
+.coverage-tmp-*/
+.DS_Store
+#ai
+.superpowers/
+
+#ide
+.idea/
+
+#claude
+.claude/worktrees/
+.claude/settings.json
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
