@@ -1,0 +1,9 @@
+{
+  // Isolated-world content scripts: same files as the first content_scripts entry in manifest.json.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "types": ["chrome"] },
+  "files": [
+    "types/common.d.ts",
+    "extension/common-isolated.js", "extension/bridge.js"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "unlimited-pins-for-whatsapp-web",
+  "description": "Unofficial Chrome extension: pin unlimited chats in WhatsApp Web's native chat list.",
+  "scripts": {
+    "test": "npm run typecheck && npm run lint && npm run test:unit && npm run test:integration && npm run test:e2e",
+    "typecheck": "tsc -p tsconfig.isolated.json && tsc -p tsconfig.page.json",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"extension/**\" tests/unit/*.test.js tests/integration/*.test.js",
+    "test:e2e": "playwright test",
+    "build": "node scripts/build.js",
+    "icons": "node scripts/icons.js",
+    "sync-common": "node scripts/sync-common.js",
+    "lint": "eslint ."
+  },
+  "author": "VatslauX",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VatslauX/unlimited-pins-for-whatsapp-web.git"
+  },
+  "homepage": "https://github.com/VatslauX/unlimited-pins-for-whatsapp-web",
+  "bugs": {
+    "url": "https://github.com/VatslauX/unlimited-pins-for-whatsapp-web/issues"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
+    "@types/chrome": "^0.3.7",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "jsdom": "^30.1.3",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "minimatch": "11.0.5"
+  },
+  "private": true
+}
