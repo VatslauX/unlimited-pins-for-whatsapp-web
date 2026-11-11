@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Source for extension/icons/*.png (npm run icons). A push pin on a green rounded square. -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="#25D366"/>
+  <g transform="rotate(45 64 64)" fill="#ffffff">
+    <rect x="46" y="22" width="36" height="10" rx="4"/>
+    <path d="M52 32 h24 l4 34 h-32 z"/>
+    <rect x="36" y="64" width="56" height="10" rx="4"/>
+    <path d="M61 74 h6 l-1 34 h-4 z"/>
+  </g>
+</svg>

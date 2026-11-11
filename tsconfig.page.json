@@ -1,0 +1,8 @@
+{
+  // Page-world (MAIN) content scripts: no chrome.* here.
+  "extends": "./tsconfig.base.json",
+  "files": [
+    "types/common.d.ts", "types/page.d.ts",
+    "extension/common.js", "extension/pins.js"
+  ]
+}
