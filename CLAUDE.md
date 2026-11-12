@@ -38,6 +38,16 @@ npm run sync-common        # after editing extension/common.js: copies it to com
 
 The manifest version lives only in `extension/manifest.json`; `package.json` has no version. CI runs `npm test` on pushes to `main` and pull requests.
 
+## Workflow skills
+
+Task-specific procedures live in `.claude/skills/`: `update-docs`, `review` and `release`. Before every commit that changes `extension/`, `tests/` or `scripts/`: `update-docs`, then `review`; fix P1 findings first. Use a skill only when its task applies.
+
+## Running the extension locally
+
+`npm install` and `npx playwright install chromium` set up the tests. To try the source in Chrome: `chrome://extensions` → **Developer mode** → **Load unpacked** → `extension/`, then reload WhatsApp Web. It is running when the `<html>` element has `data-up-status="ready"`.
+
+The README is for users only (features, installation, privacy, limitations), like tweaks-for-degiro's. Developer and release notes belong here.
+
 ## Releasing
 
 Use the `release` skill (`.claude/skills/release/`) before every release: it runs the pre-release gate and ends with a go/no-go report. Only the user decides to release; push the `v<version>` tag only after their explicit yes to that report. The tag push is what submits the build to the Chrome Web Store.

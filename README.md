@@ -1,52 +1,48 @@
 # Unlimited Pins for WhatsApp Web (unofficial)
 
-Chrome extension: pin more than 3 chats in WhatsApp Web's own chat list.
+[![Test](https://github.com/VatslauX/unlimited-pins-for-whatsapp-web/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/VatslauX/unlimited-pins-for-whatsapp-web/actions/workflows/test.yml)
 
-Not affiliated with, endorsed or supported by WhatsApp or Meta.
+A small Chrome extension that lets you pin more than 3 chats in WhatsApp Web (web.whatsapp.com). The extra pins look and work like WhatsApp's own.
 
-## How it works
+> **Unofficial.** Not affiliated with, endorsed or supported by WhatsApp or Meta. WhatsApp is a trademark of its owner.
 
-- Use WhatsApp's own **Pin chat** menu item or keyboard shortcut, as usual.
-- While you have fewer than 3 normal pins, a new pin is a normal WhatsApp pin and syncs to your phone.
-- Past 3, the extension keeps the pin in this browser and marks the chat as pinned in the page. It shows at the top of the list with WhatsApp's own pin icon, and **Unpin** works as usual.
-- Extra pins are never sent to WhatsApp's servers. They don't show on your phone or other devices, and they are per Chrome profile.
+## Features
 
-## Install (development)
+**Pin more than 3 chats**
+- Use WhatsApp's own **Pin chat** item in the chat menu, or its keyboard shortcut, as usual. WhatsApp's message that only 3 chats can be pinned no longer appears.
+- Extra pins sit at the top of the chat list with WhatsApp's own pin icon. A new pin goes to the top.
+- **Unpin** works as usual, from the same menu or shortcut.
 
-1. Open `chrome://extensions` and turn on **Developer mode**.
-2. Click **Load unpacked** and choose the `extension/` folder.
-3. Reload WhatsApp Web.
+**Your first 3 pins stay normal WhatsApp pins**
+- While you have fewer than 3 pins, a new pin is a normal WhatsApp pin and shows on your phone too.
+- Pins past 3 are kept only in this browser. They are never sent to WhatsApp, so they don't show on your phone or your other devices.
+- When you unpin a normal pin, your next pin becomes a normal one again. Extra pins you already have stay in this browser.
 
-To check it's running: in DevTools, the `<html>` element has `data-up-status="ready"`.
+**Kept after a reload, shown in every tab**
+- Extra pins stay after you reload WhatsApp Web or restart Chrome.
+- Pinning or unpinning in one WhatsApp Web tab shows up in every other open tab right away.
 
-## Development
+## Installation
 
-```sh
-npm install
-npx playwright install chromium
-npm test          # typecheck, lint, unit, integration and e2e tests
-npm run build     # dist/unlimited-pins-for-whatsapp-web-<version>.zip
-```
+Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/flnjhmfjbpendkggmmbkdnankjojhbgg). Chrome keeps it up to date automatically.
 
-The tests use a fake of WhatsApp Web's internals and never contact WhatsApp. See `CLAUDE.md` for the project map.
+Requires Chrome 111 or newer. There is nothing to set up: open or reload WhatsApp Web and pin chats as usual.
 
-### Releasing
+## Privacy & safety
 
-1. Bump `version` in `extension/manifest.json` and give `CHANGELOG.md` a `## <version> — <YYYY-MM-DD>` heading.
-2. Push to `main` and wait for CI to pass.
-3. `git tag v<version> && git push origin v<version>`
+- Runs only on `https://web.whatsapp.com/`. The only permission is `storage`, used to save your extra pins. It makes no network requests at all, and there is no analytics or remote code.
+- Extra pins are saved only on this computer, in Chrome's local extension storage for your Chrome profile. They are not synced to your Google account, because a chat's id contains the contact's phone number.
+- The extension never sends more pins to WhatsApp than WhatsApp itself allows. It doesn't read your messages or contacts' names.
 
-The tag runs `.github/workflows/release.yml`: tests, build, upload to the Chrome Web Store, submit for review, and a GitHub Release with the zip. The tag must match the manifest version.
+## Notes & limitations
 
-## Limitations
+- Extra pins are per Chrome profile. Another computer, browser or Chrome profile doesn't have them.
+- Turn the extension off and the extra pins disappear from the list after a reload; turn it on again and they come back. Removing the extension deletes them. Your normal WhatsApp pins are not affected either way.
+- Channel (newsletter) pins keep WhatsApp's own limit.
+- The extension relies on WhatsApp Web's internal structure, so a WhatsApp update may break it. If that happens, the extension does nothing and WhatsApp works as usual, with its own 3-pin limit.
 
-- It relies on WhatsApp Web's internal module names. A WhatsApp update can break it; then the extension does nothing and WhatsApp behaves as usual.
-- Newsletter (channel) pins keep WhatsApp's own limit.
-
-## Privacy
-
-Pins are stored only in Chrome's local extension storage on this computer. Nothing is sent anywhere. See [PRIVACY.md](PRIVACY.md).
+See [CHANGELOG.md](CHANGELOG.md) for release notes and [PRIVACY.md](PRIVACY.md) for the privacy policy.
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+[Apache License 2.0](LICENSE) — see also [NOTICE](NOTICE). WhatsApp is a trademark of its owner; this project is not affiliated with WhatsApp or Meta.
