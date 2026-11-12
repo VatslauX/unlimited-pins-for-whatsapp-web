@@ -30,6 +30,14 @@ npm run build     # dist/unlimited-pins-for-whatsapp-web-<version>.zip
 
 The tests use a fake of WhatsApp Web's internals and never contact WhatsApp. See `CLAUDE.md` for the project map.
 
+### Releasing
+
+1. Bump `version` in `extension/manifest.json` and give `CHANGELOG.md` a `## <version> — <YYYY-MM-DD>` heading.
+2. Push to `main` and wait for CI to pass.
+3. `git tag v<version> && git push origin v<version>`
+
+The tag runs `.github/workflows/release.yml`: tests, build, upload to the Chrome Web Store, submit for review, and a GitHub Release with the zip. The tag must match the manifest version.
+
 ## Limitations
 
 - It relies on WhatsApp Web's internal module names. A WhatsApp update can break it; then the extension does nothing and WhatsApp behaves as usual.
