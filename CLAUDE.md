@@ -31,12 +31,16 @@ npm run sync-common        # after editing extension/common.js: copies it to com
 ## Project map
 
 - `extension/`: shipped extension. Source architecture and security requirements are in `.claude/rules/extension-architecture.md` and `.claude/rules/extension-security.md`.
-- `tests/unit/`: static checks for the manifest, source safety, translations and GitHub Actions pins (every `uses:` is a commit SHA with a version comment, and Dependabot tracks actions), plus the `common.js` helpers.
+- `tests/unit/`: static checks for the manifest, source safety, translations, store publishing, and GitHub Actions pins (every `uses:` is a commit SHA with a version comment, and Dependabot tracks actions), plus the `common.js` helpers.
 - `tests/integration/`, `tests/e2e/`, `tests/fixtures/`: behavior against a fake of WhatsApp's internals. See `.claude/rules/test-fixtures.md`.
-- `scripts/`: build, icons, and the `common.js` copy.
-- `.github/workflows/`: CI. Actions are pinned to commit SHAs; `.github/dependabot.yml` updates the pins and the npm dev dependencies weekly. Minor and patch updates are grouped; majors get their own PR.
+- `scripts/`: build, icons, the `common.js` copy, and Chrome Web Store publishing (`cws-publish.js`).
+- `.github/workflows/`: CI (`test.yml`), release (`release.yml`: a pushed `v<manifest version>` tag tests, builds, submits the zip to the Chrome Web Store for review and creates a GitHub Release), and a manual read-only store login check (`cws-auth-check.yml`). Both store workflows sign in with keyless Workload Identity Federation from the repository variables `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`, `CWS_PUBLISHER_ID`, `CWS_ITEM_ID`. Actions are pinned to commit SHAs (the release job holds the Web Store token); `.github/dependabot.yml` updates the pins and the npm dev dependencies weekly. Minor and patch updates are grouped; majors get their own PR.
 
 The manifest version lives only in `extension/manifest.json`; `package.json` has no version. CI runs `npm test` on pushes to `main` and pull requests.
+
+## Releasing
+
+Use the `release` skill (`.claude/skills/release/`) before every release: it runs the pre-release gate and ends with a go/no-go report. Only the user decides to release; push the `v<version>` tag only after their explicit yes to that report. The tag push is what submits the build to the Chrome Web Store.
 
 ## Testing against the real WhatsApp Web
 
