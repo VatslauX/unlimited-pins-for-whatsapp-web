@@ -3,6 +3,7 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
+const { JSDOM } = require('jsdom');
 
 const EXT = path.resolve(__dirname, '../../extension');
 const jsFiles = fs.readdirSync(EXT, { recursive: true }).map(String).filter(f => f.endsWith('.js'));
@@ -81,12 +82,21 @@ test('rows.js changes only how the chat list looks: no pins, no status', () => {
   assert.doesNotMatch(s, /ATTR\.(pins|save|status)|setPin|WAWebCollections|WAWebChatPinBridge/);
 });
 
-test('the options page loads only its own script files: no inline script, no remote resources', () => {
+test('the settings panel loads only its own script files: no inline script, no remote resources', () => {
   const html = fs.readFileSync(path.join(EXT, 'options.html'), 'utf8');
-  const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
-  assert.deepEqual(scripts.map(m => (m[1].match(/src="([^"]+)"/) || [])[1]), ['common-isolated.js', 'options.js']);
-  for (const m of scripts) assert.equal(m[2].trim(), '', 'no inline script');
-  assert.doesNotMatch(html, /https?:\/\/|\son[a-z]+=/i, 'no remote URLs or inline handlers');
+  // parsed like a browser would (any letter case, any attribute order), not with a regex
+  const doc = new JSDOM(html).window.document;
+  const scripts = [...doc.querySelectorAll('script')];
+  assert.deepEqual(scripts.map(s => s.getAttribute('src')), ['common-isolated.js', 'options.js']);
+  for (const s of scripts) assert.equal(s.textContent.trim(), '', 'no inline script');
+  for (const el of doc.querySelectorAll('*')) {
+    for (const a of el.attributes) {
+      assert.ok(!/^on/i.test(a.name), `inline handler ${a.name} on <${el.tagName.toLowerCase()}>`);
+      // src/href only to extension files: no scheme (https:, data:, ...) and no //host
+      if (/^(src|href)$/i.test(a.name)) assert.doesNotMatch(a.value.trim(), /^([a-z][a-z0-9+.-]*:|\/\/)/i, `${a.name}="${a.value}"`);
+    }
+  }
+  assert.doesNotMatch(html, /https?:\/\//i, 'no remote URLs');
 });
 
 test('common-isolated.js is an exact copy of common.js (run npm run sync-common)', () => {
