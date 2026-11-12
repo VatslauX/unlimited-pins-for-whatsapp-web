@@ -3,6 +3,6 @@
   "extends": "./tsconfig.base.json",
   "files": [
     "types/common.d.ts", "types/page.d.ts",
-    "extension/common.js", "extension/pins.js"
+    "extension/common.js", "extension/pins.js", "extension/rows.js"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  // The options page: the scripts options.html loads, in its order.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "types": ["chrome"] },
+  "files": [
+    "types/common.d.ts",
+    "extension/common-isolated.js", "extension/options.js"
+  ]
+}

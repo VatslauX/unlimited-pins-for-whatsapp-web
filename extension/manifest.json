@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Unlimited Pins for WhatsApp Web (unofficial)",
   "short_name": "Unlimited Pins",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "minimum_chrome_version": "111",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
@@ -16,10 +16,20 @@
   "permissions": [
     "storage"
   ],
+  "action": {
+    "default_popup": "options.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "content_scripts": [
     {
       "matches": [
         "https://web.whatsapp.com/*"
+      ],
+      "css": [
+        "rows.css"
       ],
       "js": [
         "common-isolated.js",
@@ -33,7 +43,8 @@
       ],
       "js": [
         "common.js",
-        "pins.js"
+        "pins.js",
+        "rows.js"
       ],
       "run_at": "document_idle",
       "world": "MAIN"

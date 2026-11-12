@@ -29,9 +29,13 @@ test('every language has the same keys and placeholders as English', () => {
   }
 });
 
-test('every key used in the manifest exists, and every key is used', () => {
+test('every key used in the manifest or the options page exists, and every key is used', () => {
   const manifest = fs.readFileSync(path.join(EXT, 'manifest.json'), 'utf8');
-  const used = new Set([...manifest.matchAll(/__MSG_([A-Za-z]+)__/g)].map(m => m[1]));
+  const options = fs.readFileSync(path.join(EXT, 'options.html'), 'utf8');
+  const used = new Set([
+    ...[...manifest.matchAll(/__MSG_([A-Za-z]+)__/g)].map(m => m[1]),
+    ...[...options.matchAll(/data-i18n="([A-Za-z]+)"/g)].map(m => m[1])
+  ]);
   for (const k of used) assert.ok(en[k], `missing in en: ${k}`);
   for (const k of Object.keys(en)) assert.ok(used.has(k), `unused text: ${k}`);
 });

@@ -26,8 +26,18 @@ test('no web-accessible resources, no externally_connectable, no background', ()
 });
 
 test('every referenced file exists', () => {
-  const files = [...Object.values(m.icons || {}), ...m.content_scripts.flatMap(c => c.js)];
+  const files = [...Object.values(m.icons || {}), ...m.content_scripts.flatMap(c => [...c.js, ...(c.css || [])]), m.options_ui.page];
   for (const f of files) assert.ok(fs.existsSync(path.join(EXT, f)), `missing ${f}`);
+});
+
+test('the settings panel opens from the toolbar icon and as the options page, and loads the scripts tsconfig.options.json checks', () => {
+  assert.deepStrictEqual(m.action, { default_popup: 'options.html' });
+  assert.deepStrictEqual(m.options_ui, { page: 'options.html', open_in_tab: false });
+  const html = fs.readFileSync(path.join(EXT, 'options.html'), 'utf8');
+  const loaded = [...html.matchAll(/<script src="([^"]+)"/g)].map(x => x[1]);
+  const ts = JSON.parse(fs.readFileSync(path.join(EXT, '..', 'tsconfig.options.json'), 'utf8').replace(/^\s*\/\/.*$/gm, ''))
+    .files.filter(f => f.startsWith('extension/')).map(f => f.slice('extension/'.length));
+  assert.deepStrictEqual(ts, loaded);
 });
 
 test('content scripts run only on WhatsApp Web, top frame only', () => {

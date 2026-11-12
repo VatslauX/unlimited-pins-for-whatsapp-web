@@ -2,5 +2,33 @@
   "extDescription": {
     "message": "Fija más de 3 chats en la lista de chats de WhatsApp Web. Los fijados extra quedan en este equipo. Sin relación con WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
+  },
+  "rowSizeLabel": {
+    "message": "Tamaño de las filas",
+    "description": "Settings panel: name of the row size setting"
+  },
+  "rowSizeOriginal": {
+    "message": "Original",
+    "description": "Row size: WhatsApp unchanged"
+  },
+  "rowSizeMedium": {
+    "message": "Mediano",
+    "description": "Row size: smaller photos, two lines"
+  },
+  "rowSizeCompact": {
+    "message": "Compacto",
+    "description": "Row size: one line per chat"
+  },
+  "rowSizeHint": {
+    "message": "Más chats en pantalla. Las pestañas abiertas de WhatsApp Web cambian al momento.",
+    "description": "Settings panel: note under the row size setting"
+  },
+  "sectionChatList": {
+    "message": "Lista de chats",
+    "description": "Settings panel: section heading, shown in capitals"
+  },
+  "versionLabel": {
+    "message": "Versión",
+    "description": "Settings panel: before the version number, e.g. Version 0.2.0"
   }
 }

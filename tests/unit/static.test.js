@@ -38,9 +38,9 @@ test('pins are stored only in storage.local (chat ids contain phone numbers)', (
   }
 });
 
-test('only bridge.js uses chrome.*', () => {
+test('only bridge.js and the options page use chrome.*', () => {
   for (const [f, s] of Object.entries(src)) {
-    if (f === 'bridge.js') continue;
+    if (f === 'bridge.js' || f === 'options.js') continue;
     assert.doesNotMatch(code(s), /\bchrome\./, f);
   }
 });
@@ -74,6 +74,19 @@ test('extension source is English only (no Cyrillic)', () => {
 test('shared helpers are loaded first in both worlds', () => {
   const m = JSON.parse(fs.readFileSync(path.join(EXT, 'manifest.json'), 'utf8'));
   for (const cs of m.content_scripts) assert.strictEqual(cs.js[0], cs.world === 'MAIN' ? 'common.js' : 'common-isolated.js');
+});
+
+test('rows.js changes only how the chat list looks: no pins, no status', () => {
+  const s = code(src['rows.js']);
+  assert.doesNotMatch(s, /ATTR\.(pins|save|status)|setPin|WAWebCollections|WAWebChatPinBridge/);
+});
+
+test('the options page loads only its own script files: no inline script, no remote resources', () => {
+  const html = fs.readFileSync(path.join(EXT, 'options.html'), 'utf8');
+  const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+  assert.deepEqual(scripts.map(m => (m[1].match(/src="([^"]+)"/) || [])[1]), ['common-isolated.js', 'options.js']);
+  for (const m of scripts) assert.equal(m[2].trim(), '', 'no inline script');
+  assert.doesNotMatch(html, /https?:\/\/|\son[a-z]+=/i, 'no remote URLs or inline handlers');
 });
 
 test('common-isolated.js is an exact copy of common.js (run npm run sync-common)', () => {

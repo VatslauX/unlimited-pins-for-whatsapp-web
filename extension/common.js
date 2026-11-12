@@ -9,9 +9,24 @@
   const ATTR = Object.freeze({
     pins: 'data-up-pins', // isolated -> page: the stored pin list
     save: 'data-up-save', // page -> isolated: the pin list to store
-    status: 'data-up-status' // page: 'loading' | 'ready' | 'missing'
+    status: 'data-up-status', // page: 'loading' | 'ready' | 'missing'
+    rowSize: 'data-up-size', // isolated -> page: the row size chosen in the settings panel
+    // page: the row size each list is drawn with; the stylesheet keys on them
+    rows: 'data-up-rows', // the chat list
+    archivedRows: 'data-up-archived' // the archived chats list
   });
   const STATUS = Object.freeze(['loading', 'ready', 'missing']);
+  // chat list row sizes, as stored and shown in the options page; the first is the default
+  const ROW_SIZES = Object.freeze(['original', 'medium', 'compact']);
+
+  /**
+   * A valid row size from anything; 'original' (WhatsApp unchanged) for anything else.
+   * @param {unknown} value
+   * @returns {string}
+   */
+  function rowSize(value) {
+    return typeof value === 'string' && ROW_SIZES.includes(value) ? value : ROW_SIZES[0];
+  }
   const MAX_PINS = 500;
   // WhatsApp chat ids: "<digits or token>@c.us", "...@g.us", "...@lid", "...@newsletter", ...
   const CHAT_ID = /^[\w.:-]{1,80}@[a-z][a-z.]{0,29}$/;
@@ -74,7 +89,7 @@
     document.documentElement.setAttribute(name, JSON.stringify(sanitize(pins)));
   }
 
-  const api = Object.freeze({ ATTR, STATUS, MAX_PINS, isChatId, isPinTime, sanitize, readPins, writePins });
+  const api = Object.freeze({ ATTR, STATUS, ROW_SIZES, MAX_PINS, isChatId, isPinTime, sanitize, readPins, writePins, rowSize });
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else if (!(/** @type {any} */ (globalThis).__upins)) Object.defineProperty(globalThis, '__upins', { value: api });
 })();

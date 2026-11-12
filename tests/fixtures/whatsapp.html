@@ -3,6 +3,8 @@
      Switches, set before the page's scripts run (page.addInitScript):
        window.__MOCK_CHATS    the chat list (default below: 3 native pins, 4 unpinned chats)
        window.__MOCK_LOAD_MS  when WhatsApp's modules become available (default 300 ms)
+       window.__MOCK_REACT    also draw the chat list with React like WhatsApp (for rows.js), in
+                              #chat-list-root, __MOCK_LIST_MS after the modules load (default 1000; about 2500 live)
      The test drives it through window.__wa (ui.menu, ui.shortcut, ui.resync, serverCalls, ...). -->
 <html>
 <head>
@@ -17,6 +19,7 @@
 </head>
 <body>
   <div id="pane-side" role="grid" aria-label="Chat list"></div>
+  <script src="/mock/react.js"></script>
   <script src="/mock/fake-whatsapp.js"></script>
   <script>
     (function () {
@@ -30,7 +33,10 @@
         { id: 'c@g.us', name: 'Club', t: 50 },
         { id: 'd@lid', name: 'Dana', t: 40 }
       ];
-      const wa = createWhatsApp({ chats, window, loadAfterMs: window.__MOCK_LOAD_MS ?? 300 });
+      const wa = createWhatsApp({
+        chats, window, loadAfterMs: window.__MOCK_LOAD_MS ?? 300,
+        react: window.__MOCK_REACT ? window.__mockReact : undefined, listAfterMs: window.__MOCK_LIST_MS ?? 1000
+      });
       window.__wa = wa;
       const list = document.getElementById('pane-side');
       function render() {
