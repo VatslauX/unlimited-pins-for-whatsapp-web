@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
 const { createWhatsApp } = require('../fixtures/fake-whatsapp');
+const { REACT_BUNDLE } = require('../fixtures/react-bundle');
 
 const EXT = process.env.UP_EXTENSION_DIR ? path.resolve(process.env.UP_EXTENSION_DIR) : path.resolve(__dirname, '../../extension');
 const manifest = JSON.parse(fs.readFileSync(path.join(EXT, 'manifest.json'), 'utf8'));
@@ -72,11 +73,14 @@ function createWorld({ stored, latency = 0 } = {}) {
     stored: () => copy(data.pins),
     /** change storage from outside (e.g. another device's tab) */
     set: value => local.set({ pins: value }),
+    /** what the options page does: store a row size */
+    setRowSize: value => local.set({ rowSize: value }),
     /**
      * Open WhatsApp Web in a new tab, with the extension loaded.
-     * @param {{ chats?: any[], loadAfterMs?: number }} [o]
+     * @param {{ chats?: any[], loadAfterMs?: number, react?: boolean, listAfterMs?: number, rowType?: string, archivedRowType?: string }} [o]
+     *   react: draw the chat list with React, like WhatsApp (for rows.js); listAfterMs: when it first draws
      */
-    open({ chats = CHATS, loadAfterMs = 0 } = {}) {
+    open({ chats = CHATS, loadAfterMs = 0, react = false, listAfterMs = 0, rowType, archivedRowType } = {}) {
       const virtualConsole = new VirtualConsole();
       virtualConsole.on('error', (...a) => errors.push(a.map(String).join(' ')));
       virtualConsole.on('jsdomError', e => errors.push(String(e && e.stack || e)));
@@ -84,7 +88,8 @@ function createWorld({ stored, latency = 0 } = {}) {
         url: 'https://web.whatsapp.com/', runScripts: 'outside-only', virtualConsole
       });
       const win = dom.window;
-      const wa = createWhatsApp({ chats: copy(chats), window: win, loadAfterMs });
+      if (react) win.eval(REACT_BUNDLE);
+      const wa = createWhatsApp({ chats: copy(chats), window: win, loadAfterMs, react: react ? win.__mockReact : undefined, listAfterMs, rowType, archivedRowType });
       const tabListeners = new Set();
       win.chrome = {
         storage: {

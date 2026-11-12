@@ -8,12 +8,26 @@
 // Both the menu and the action look modules up through require() on every call, like WhatsApp's
 // own o("...") calls, so a patched export is what they get.
 //
+// With `react` ({ React, createRoot }, see react-bundle.js) it also draws the chat list the way
+// WhatsApp does, for rows.js (checked 2026-11-12):
+//   react                          WhatsApp's React, from require()
+//   WAWebFlatList.react.FlatList   a virtual list that places each row itself, absolutely, at the
+//                                  height its data gives: data [{ type: 'ROW_CHATS', height: 76,
+//                                  itemKey, data }], defaultItemHeight 76, testid 'chat-list'.
+//                                  The chat list looks FlatList up on every render, so a replaced
+//                                  export is used from its next render on. Other lists (testid
+//                                  'other-list' here) use the same component.
+// The list first draws `listAfterMs` after the modules load (about 2.5 s in the live page).
+//
 // Used by tests/integration (in JSDOM) and served to the e2e mock page (tests/fixtures/whatsapp.html).
 (function (root) {
   /**
-   * @param {{ chats: { id: string, name?: string, pin?: number, t?: number }[], window: any, loadAfterMs?: number }} o
+   * @param {{ chats: { id: string, name?: string, pin?: number, t?: number }[], window: any, loadAfterMs?: number,
+   *   react?: { React: any, createRoot: any }, listAfterMs?: number, rowType?: string, archivedRowType?: string }} o
+   *   rowType: the chat rows' type in the list data (as if WhatsApp renamed 'ROW_CHATS');
+   *   archivedRowType: the same for the archived list only (default: rowType)
    */
-  function createWhatsApp({ chats, window, loadAfterMs = 0 }) {
+  function createWhatsApp({ chats, window, loadAfterMs = 0, react, listAfterMs = 0, rowType = 'ROW_CHATS', archivedRowType = rowType }) {
     const LIMIT = 3, NEWSLETTER_LIMIT = 2;
     /** @type {Record<string, ((chat: any) => void)[]>} */
     const handlers = {};
@@ -83,13 +97,78 @@
     };
 
     const modules = { WAWebCollections: { Chat }, WAWebChatPinBridge: Bridge, WAWebSetPinChatAction: Action };
+    const list = react ? chatList(react) : null;
+    if (list) Object.assign(modules, list.modules);
     let loaded = loadAfterMs <= 0;
-    if (!loaded) window.setTimeout(() => { loaded = true; }, loadAfterMs);
+    const onLoad = () => { if (list) window.setTimeout(list.mount, listAfterMs); };
+    if (loaded) onLoad();
+    else window.setTimeout(() => { loaded = true; onLoad(); }, loadAfterMs);
     function mod(name) {
       if (!loaded || !(name in modules)) throw new Error(`Requiring unknown module "${name}"`);
       return modules[name];
     }
     window.require = require;
+
+    /** The chat list drawn with React, like WhatsApp's. @param {{ React: any, createRoot: any }} r */
+    function chatList({ React, createRoot }) {
+      const h = React.createElement;
+      const ROW = 76;
+      // places every row itself at the height its data gives, like WhatsApp's virtual list
+      function FlatList(props) {
+        let y = 0;
+        const rows = props.data.map((item, i) => {
+          const top = y;
+          y += item.height;
+          return h('div', {
+            key: item.itemKey, role: props.itemRole, 'data-testid': `list-item-${i}`, 'data-id': item.itemKey,
+            style: { position: 'absolute', width: '100%', height: `${item.height}px`, transform: `translateY(${top}px)` }
+          }, props.renderItem(item));
+        });
+        return h('div', { 'data-testid': props.testid },
+          h('div', { role: 'grid', style: { position: 'relative', height: `${y}px` } }, rows));
+      }
+      // a chat cell with WhatsApp's data-testid structure (rows.css anchors on it); styled with
+      // classes, like WhatsApp's, so rows.css can override them
+      const CSS = '.fw-cell{display:flex;min-height:72px}.fw-photo{width:48px;height:48px;border-radius:50%;background:#ccc}'
+        + '.fw-text{display:flex;flex-direction:column;flex:1;min-width:0}';
+      const cell = chat => h('div', { role: 'gridcell' }, h('div', null,
+        h('div', { 'data-testid': 'cell-frame-container', className: 'fw-cell' },
+          h('div', null, h('div', { className: 'fw-photo' })),
+          h('div', { className: 'fw-text' },
+            h('div', { role: 'gridcell' }, h('div', { 'data-testid': 'cell-frame-title' }, chat.name)),
+            h('div', { 'data-testid': 'cell-frame-secondary' }, 'last message')))));
+      let redraw = () => {};
+      function ChatList() {
+        const [, bump] = React.useReducer(x => x + 1, 0);
+        React.useEffect(() => { redraw = bump; }, []);
+        // looked up on every render, like WhatsApp's o("WAWebFlatList.react")
+        const { FlatList: List } = require('WAWebFlatList.react');
+        const data = Chat.getModelsArray().map(c => ({ type: rowType, height: ROW, itemKey: String(c.id), data: c }));
+        // the archived chats: WhatsApp draws them in a list of their own (here: the last two chats)
+        const archived = data.slice(-2).map(item => ({ ...item, type: archivedRowType }));
+        const other = [{ type: 'OTHER', height: 40, itemKey: 'o1', data: null }, { type: 'OTHER', height: 40, itemKey: 'o2', data: null }];
+        return h('div', null,
+          h(List, { testid: 'chat-list', data, defaultItemHeight: ROW, itemRole: 'row', renderItem: item => cell(item.data) }),
+          h(List, { testid: 'archived-chatlist', data: archived, defaultItemHeight: ROW, itemRole: 'row', renderItem: item => cell(item.data) }),
+          h(List, { testid: 'other-list', data: other, defaultItemHeight: 40, itemRole: 'row', renderItem: () => 'other' }));
+      }
+      const handlers = ['change', 'add'];
+      handlers.forEach(ev => Chat.on(ev, () => redraw()));
+      return {
+        modules: { react: React, 'WAWebFlatList.react': { FlatList, DEFAULT_ITEM_HEIGHT: 72 } },
+        mount() {
+          const style = window.document.createElement('style');
+          style.textContent = CSS;
+          window.document.head.appendChild(style);
+          const el = window.document.createElement('div');
+          el.id = 'chat-list-root';
+          window.document.body.appendChild(el);
+          createRoot(el).render(h(ChatList));
+        },
+        /** the chat list's parent renders again (a new message, a filter click) */
+        redraw: () => redraw()
+      };
+    }
 
     // What the user does
     const ui = {
@@ -109,7 +188,9 @@
         for (const c of models.values()) c.set({ pin: server.get(String(c.id)) || 0 });
       },
       /** a new message: the chat moves up in time */
-      message(id) { Chat.get(id).set({ t: Date.now() }); }
+      message(id) { Chat.get(id).set({ t: Date.now() }); },
+      /** the chat list's parent renders again (a new message, a filter click); needs `react` */
+      redraw() { if (list) list.redraw(); }
     };
 
     return {

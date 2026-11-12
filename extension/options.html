@@ -1,0 +1,64 @@
+<!doctype html>
+<!-- The extension's settings panel: opens from the toolbar icon (action.default_popup) and as the
+     options page (options_ui). One setting so far: the chat list row size. Texts come from
+     _locales through options.js (data-i18n); scripts are files, as Manifest V3 requires. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unlimited Pins</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fff; --card: #f3f5f7; --text: #111b21; --muted: #5f6b73; --line: #dde2e6;
+      --accent: #1daa61; --on-accent: #fff; --seg: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1f2428; --card: #2a3035; --text: #e9edef; --muted: #9aa5ad; --line: #3a4248; --seg: #1f2428; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; width: 360px; padding: 20px; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    header img { width: 48px; height: 48px; border-radius: 12px; flex: none; }
+    h1 { font-size: 17px; line-height: 1.25; margin: 0; font-weight: 650; }
+    .version { color: var(--muted); margin-top: 2px; }
+    section { background: var(--card); border-radius: 14px; padding: 14px 16px 16px; }
+    h2 { margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+    legend { padding: 0; font-size: 15px; font-weight: 600; }
+    .hint { color: var(--muted); margin: 2px 0 12px; }
+    .switch { display: flex; padding: 3px; gap: 3px; border-radius: 999px; background: var(--line); }
+    .switch input { position: absolute; opacity: 0; pointer-events: none; }
+    .switch label { flex: 1; text-align: center; padding: 7px 8px; border-radius: 999px; cursor: pointer; user-select: none; font-weight: 500; }
+    .switch label:hover { background: var(--seg); }
+    .switch input:checked + label { background: var(--accent); color: var(--on-accent); }
+    .switch input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="">
+    <div>
+      <h1 id="name">Unlimited Pins for WhatsApp Web (unofficial)</h1>
+      <div class="version"><span data-i18n="versionLabel">Version</span> <span id="version"></span></div>
+    </div>
+  </header>
+  <section>
+    <h2 data-i18n="sectionChatList">Chat list</h2>
+    <fieldset>
+      <legend data-i18n="rowSizeLabel">Row size</legend>
+      <p class="hint" data-i18n="rowSizeHint">Fit more chats on screen. Open WhatsApp Web tabs change right away.</p>
+      <div class="switch">
+        <input type="radio" name="rowSize" id="size-original" value="original">
+        <label for="size-original" data-i18n="rowSizeOriginal">Original</label>
+        <input type="radio" name="rowSize" id="size-medium" value="medium">
+        <label for="size-medium" data-i18n="rowSizeMedium">Medium</label>
+        <input type="radio" name="rowSize" id="size-compact" value="compact">
+        <label for="size-compact" data-i18n="rowSizeCompact">Compact</label>
+      </div>
+    </fieldset>
+  </section>
+  <script src="common-isolated.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

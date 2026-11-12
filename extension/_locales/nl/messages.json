@@ -2,5 +2,33 @@
   "extDescription": {
     "message": "Zet meer dan 3 chats vast in de chatlijst van WhatsApp Web. Extra pins blijven op deze computer. Niet gelieerd aan WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
+  },
+  "rowSizeLabel": {
+    "message": "Rijgrootte",
+    "description": "Settings panel: name of the row size setting"
+  },
+  "rowSizeOriginal": {
+    "message": "Origineel",
+    "description": "Row size: WhatsApp unchanged"
+  },
+  "rowSizeMedium": {
+    "message": "Middel",
+    "description": "Row size: smaller photos, two lines"
+  },
+  "rowSizeCompact": {
+    "message": "Compact",
+    "description": "Row size: one line per chat"
+  },
+  "rowSizeHint": {
+    "message": "Meer chats in beeld. Open WhatsApp Web-tabbladen passen zich meteen aan.",
+    "description": "Settings panel: note under the row size setting"
+  },
+  "sectionChatList": {
+    "message": "Chatlijst",
+    "description": "Settings panel: section heading, shown in capitals"
+  },
+  "versionLabel": {
+    "message": "Versie",
+    "description": "Settings panel: before the version number, e.g. Version 0.2.0"
   }
 }

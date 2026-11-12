@@ -42,6 +42,12 @@ test('sanitize does not let __proto__ through', () => {
   assert.equal(Object.getPrototypeOf(out), Object.prototype);
 });
 
+test('rowSize accepts the three sizes and falls back to original for anything else', () => {
+  assert.deepEqual(up.ROW_SIZES, ['original', 'medium', 'compact']);
+  for (const s of up.ROW_SIZES) assert.equal(up.rowSize(s), s);
+  for (const v of [undefined, null, '', 'Compact', 'tiny', 'original ', 1, {}, ['compact']]) assert.equal(up.rowSize(v), 'original', String(v));
+});
+
 test('the attribute names are distinct data- attributes', () => {
   const names = Object.values(up.ATTR);
   assert.equal(new Set(names).size, names.length);

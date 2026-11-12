@@ -1,0 +1,59 @@
+/* Fits each chat row's content into the shorter rows that rows.js gives the chat lists.
+   Each list's rules apply only once rows.js has drawn that list at the new height:
+   data-up-rows for the chat list, data-up-archived for the archived chats list (on <html>).
+   Anchored on WhatsApp's data-testid attributes, checked in the live page 2026-11-12. */
+
+/* Medium or Compact */
+:is(html[data-up-rows="medium"] [data-testid="chat-list"], html[data-up-rows="compact"] [data-testid="chat-list"],
+    html[data-up-archived="medium"] [data-testid="archived-chatlist"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [role="row"] {
+  overflow: hidden; /* if WhatsApp's layout changes, clip rather than overlap the next row */
+}
+
+:is(html[data-up-rows="medium"] [data-testid="chat-list"], html[data-up-rows="compact"] [data-testid="chat-list"],
+    html[data-up-archived="medium"] [data-testid="archived-chatlist"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [role="row"] > [role="gridcell"],
+:is(html[data-up-rows="medium"] [data-testid="chat-list"], html[data-up-rows="compact"] [data-testid="chat-list"],
+    html[data-up-archived="medium"] [data-testid="archived-chatlist"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [role="row"] > [role="gridcell"] > div {
+  height: 100%;
+}
+
+:is(html[data-up-rows="medium"] [data-testid="chat-list"], html[data-up-rows="compact"] [data-testid="chat-list"],
+    html[data-up-archived="medium"] [data-testid="archived-chatlist"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-container"] {
+  min-height: 0 !important;
+  height: 100%;
+}
+
+/* Medium: smaller photo (48 -> 36 px), two lines as before */
+:is(html[data-up-rows="medium"] [data-testid="chat-list"], html[data-up-archived="medium"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-container"] > div:first-child {
+  zoom: 0.75;
+}
+
+/* Compact: small photo (24 px), name and last message on one line */
+:is(html[data-up-rows="compact"] [data-testid="chat-list"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-container"] > div:first-child {
+  zoom: 0.5;
+}
+
+:is(html[data-up-rows="compact"] [data-testid="chat-list"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-container"] > div:has(> [data-testid="cell-frame-secondary"]) {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+:is(html[data-up-rows="compact"] [data-testid="chat-list"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-container"] > div > :has(> [data-testid="cell-frame-title"]) {
+  flex: 0 1 auto;
+  max-width: 45%;
+}
+
+:is(html[data-up-rows="compact"] [data-testid="chat-list"], html[data-up-archived="compact"] [data-testid="archived-chatlist"])
+  [data-testid="cell-frame-secondary"] {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}

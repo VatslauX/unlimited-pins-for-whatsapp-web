@@ -2,5 +2,33 @@
   "extDescription": {
     "message": "Fixe mais de 3 conversas na lista do WhatsApp Web. As fixações extra ficam neste computador. Sem afiliação ao WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
+  },
+  "rowSizeLabel": {
+    "message": "Tamanho das linhas",
+    "description": "Settings panel: name of the row size setting"
+  },
+  "rowSizeOriginal": {
+    "message": "Original",
+    "description": "Row size: WhatsApp unchanged"
+  },
+  "rowSizeMedium": {
+    "message": "Médio",
+    "description": "Row size: smaller photos, two lines"
+  },
+  "rowSizeCompact": {
+    "message": "Compacto",
+    "description": "Row size: one line per chat"
+  },
+  "rowSizeHint": {
+    "message": "Mais conversas na tela. As abas abertas do WhatsApp Web mudam na hora.",
+    "description": "Settings panel: note under the row size setting"
+  },
+  "sectionChatList": {
+    "message": "Lista de conversas",
+    "description": "Settings panel: section heading, shown in capitals"
+  },
+  "versionLabel": {
+    "message": "Versão",
+    "description": "Settings panel: before the version number, e.g. Version 0.2.0"
   }
 }

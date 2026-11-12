@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.2.0 — 2026-11-12
+- **Smaller chat rows**: the extension's toolbar icon opens a settings panel where you can show the chat list in Medium or Compact rows instead of WhatsApp's Original size. Open WhatsApp Web tabs change at once, and the choice stays after a reload.
+
 ## 0.1.1 — 2026-11-12
 - No changes to how the extension works. New versions are now published to the Chrome Web Store automatically.
 

@@ -22,6 +22,11 @@ A small Chrome extension that lets you pin more than 3 chats in WhatsApp Web (we
 - Extra pins stay after you reload WhatsApp Web or restart Chrome.
 - Pinning or unpinning in one WhatsApp Web tab shows up in every other open tab right away.
 
+**Chat list row size** (optional)
+- Click the extension's icon in Chrome's toolbar and choose **Original**, **Medium** or **Compact** rows.
+- Medium shows smaller photos. Compact fits each chat on one line. Original is WhatsApp's own size and is the default.
+- Only the look of the list changes. Pins are not affected.
+
 ## Installation
 
 Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/flnjhmfjbpendkggmmbkdnankjojhbgg). Chrome keeps it up to date automatically.
@@ -30,13 +35,13 @@ Requires Chrome 111 or newer. There is nothing to set up: open or reload WhatsAp
 
 ## Privacy & safety
 
-- Runs only on `https://web.whatsapp.com/`. The only permission is `storage`, used to save your extra pins. It makes no network requests at all, and there is no analytics or remote code.
+- Runs only on `https://web.whatsapp.com/`. The only permission is `storage`, used to save your extra pins and your row size choice. It makes no network requests at all, and there is no analytics or remote code.
 - Extra pins are saved only on this computer, in Chrome's local extension storage for your Chrome profile. They are not synced to your Google account, because a chat's id contains the contact's phone number.
 - The extension never sends more pins to WhatsApp than WhatsApp itself allows. It doesn't read your messages or contacts' names.
 
 ## Notes & limitations
 
-- Extra pins are per Chrome profile. Another computer, browser or Chrome profile doesn't have them.
+- Extra pins and the row size are per Chrome profile. Another computer, browser or Chrome profile doesn't have them.
 - Turn the extension off and the extra pins disappear from the list after a reload; turn it on again and they come back. Removing the extension deletes them. Your normal WhatsApp pins are not affected either way.
 - Channel (newsletter) pins keep WhatsApp's own limit.
 - The extension relies on WhatsApp Web's internal structure, so a WhatsApp update may break it. If that happens, the extension does nothing and WhatsApp works as usual, with its own 3-pin limit.

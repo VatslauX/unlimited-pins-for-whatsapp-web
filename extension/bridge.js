@@ -4,8 +4,11 @@
 // storage.local, not storage.sync: chat ids contain phone numbers, and sync would copy
 // them into the user's Google account.
 (() => {
-  const { ATTR, sanitize, readPins, writePins } = __upins;
+  const { ATTR, sanitize, readPins, writePins, rowSize } = __upins;
   const KEY = 'pins';
+  const ROW_SIZE_KEY = 'rowSize'; // written by the options page; only read here
+  /** @param {unknown} value */
+  const showRowSize = value => document.documentElement.setAttribute(ATTR.rowSize, rowSize(value));
   // Marks this tab's own writes, so their change events are not echoed back to the page.
   // Without it, pinning A then B quickly could echo the stale {A} back and unpin B.
   const tab = Math.random().toString(36).slice(2);
@@ -15,7 +18,8 @@
 
   async function load() {
     try {
-      const r = await chrome.storage.local.get(KEY);
+      const r = await chrome.storage.local.get([KEY, ROW_SIZE_KEY]);
+      showRowSize(r[ROW_SIZE_KEY]);
       writePins(ATTR.pins, pinsOf(r[KEY]));
     } catch {} // extension updated or removed: nothing to load
   }
@@ -29,10 +33,12 @@
     } catch {}
   }).observe(document.documentElement, { attributes: true, attributeFilter: [ATTR.save] });
 
-  // Keep other open WhatsApp tabs in sync.
+  // Keep other open WhatsApp tabs in sync, and follow the row size set in the options page.
   try {
     chrome.storage.onChanged.addListener((changes, area) => {
-      if (area !== 'local' || !changes[KEY]) return;
+      if (area !== 'local') return;
+      if (changes[ROW_SIZE_KEY]) showRowSize(changes[ROW_SIZE_KEY].newValue);
+      if (!changes[KEY]) return;
       const next = /** @type {any} */ (changes[KEY].newValue);
       if (next && next.by === tab) return;
       writePins(ATTR.pins, pinsOf(next));
