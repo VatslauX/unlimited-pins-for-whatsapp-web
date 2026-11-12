@@ -3,6 +3,7 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
+const { JSDOM } = require('jsdom');
 
 const EXT = path.resolve(__dirname, '../../extension');
 const m = JSON.parse(fs.readFileSync(path.join(EXT, 'manifest.json'), 'utf8'));
@@ -34,7 +35,7 @@ test('the settings panel opens from the toolbar icon and as the options page, an
   assert.deepStrictEqual(m.action, { default_popup: 'options.html' });
   assert.deepStrictEqual(m.options_ui, { page: 'options.html', open_in_tab: false });
   const html = fs.readFileSync(path.join(EXT, 'options.html'), 'utf8');
-  const loaded = [...html.matchAll(/<script src="([^"]+)"/g)].map(x => x[1]);
+  const loaded = [...new JSDOM(html).window.document.querySelectorAll('script')].map(s => s.getAttribute('src'));
   const ts = JSON.parse(fs.readFileSync(path.join(EXT, '..', 'tsconfig.options.json'), 'utf8').replace(/^\s*\/\/.*$/gm, ''))
     .files.filter(f => f.startsWith('extension/')).map(f => f.slice('extension/'.length));
   assert.deepStrictEqual(ts, loaded);
