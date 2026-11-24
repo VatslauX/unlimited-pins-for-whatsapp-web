@@ -14,5 +14,7 @@ test('the feedback link opens a new GitHub issue with the versions, and nothing 
   expect(`${href.origin}${href.pathname}`).toBe(`${home}/issues/new`);
   expect([...href.searchParams.keys()]).toEqual(['body']); // no chat, account or settings data
   const body = href.searchParams.get('body') || '';
-  expect(body.split('\n').at(-1)).toMatch(new RegExp(`^Extension ${version.replace(/\./g, '\\.')} · Chrome \\d+ · en`));
+  const [, ext, chromeVersion, lang] = body.split('\n').at(-1)?.match(/^Extension (\S+) · Chrome (\d+) · (\S+)$/) || [];
+  expect({ ext, lang }).toEqual({ ext: version, lang: expect.stringMatching(/^en/) });
+  expect(Number(chromeVersion)).toBeGreaterThan(0);
 });
