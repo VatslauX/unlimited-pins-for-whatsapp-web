@@ -3,6 +3,10 @@
     "message": "Mehr als 3 Chats in der Chatliste von WhatsApp Web anheften. Extra-Pins bleiben auf diesem Computer. Nicht mit WhatsApp verbunden.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
   },
+  "feedbackLink": {
+    "message": "Feedback geben oder Problem melden",
+    "description": "Settings panel: link that opens a new issue on the project's GitHub page"
+  },
   "rowSizeLabel": {
     "message": "Zeilengröße",
     "description": "Settings panel: name of the row size setting"

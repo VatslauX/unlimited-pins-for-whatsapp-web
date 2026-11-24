@@ -3,6 +3,10 @@
     "message": "Fissa più di 3 chat nell'elenco chat di WhatsApp Web. Le chat fissate in più restano su questo computer. Non affiliato a WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
   },
+  "feedbackLink": {
+    "message": "Lascia un feedback o segnala un problema",
+    "description": "Settings panel: link that opens a new issue on the project's GitHub page"
+  },
   "rowSizeLabel": {
     "message": "Dimensione delle righe",
     "description": "Settings panel: name of the row size setting"

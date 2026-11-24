@@ -11,7 +11,7 @@ The manifest declares two content-script worlds:
 
 - **Isolated world:** `common-isolated.js`, `bridge.js`, and `rows.css` (CSS only). Only these can use `chrome.storage`.
 - **Page world (`world: "MAIN"`):** `common.js`, `pins.js`, `rows.js`. These can reach WhatsApp's own module loader (`window.require`) but not `chrome.*`.
-- **Settings panel** (`options.html`, both the toolbar popup `action.default_popup` and the options page `options_ui`): `common-isolated.js` and `options.js`. It is an extension page, not a content script; it uses `chrome.storage.local`, `chrome.i18n` and `chrome.runtime.getManifest()` (name and version in its header). It is the only other place that uses `chrome.*`.
+- **Settings panel** (`options.html`, both the toolbar popup `action.default_popup` and the options page `options_ui`): `common-isolated.js` and `options.js`. It is an extension page, not a content script; it uses `chrome.storage.local`, `chrome.i18n` and `chrome.runtime.getManifest()` (name and version in its header, and the feedback link's GitHub issue address from `homepage_url`). It is the only other place that uses `chrome.*`.
 - Each world has its own TypeScript project (`tsconfig.isolated.json`, `tsconfig.page.json`, `tsconfig.options.json`). Keep the `files` entries in the matching `tsconfig.*.json` aligned with the manifest; the unit tests check this.
 
 ## Shared code

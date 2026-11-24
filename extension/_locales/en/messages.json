@@ -3,6 +3,10 @@
     "message": "Pin more than 3 chats in WhatsApp Web's own chat list. Extra pins stay on this computer. Not affiliated with WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
   },
+  "feedbackLink": {
+    "message": "Feedback or report a problem",
+    "description": "Settings panel: link that opens a new issue on the project's GitHub page"
+  },
   "rowSizeLabel": {
     "message": "Row size",
     "description": "Settings panel: name of the row size setting"

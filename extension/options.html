@@ -1,6 +1,7 @@
 <!doctype html>
 <!-- The extension's settings panel: opens from the toolbar icon (action.default_popup) and as the
-     options page (options_ui). One setting so far: the chat list row size. Texts come from
+     options page (options_ui). One setting so far: the chat list row size, plus a feedback
+     link (its address is set by options.js from the manifest's homepage_url). Texts come from
      _locales through options.js (data-i18n); scripts are files, as Manifest V3 requires. -->
 <html>
 <head>
@@ -11,10 +12,10 @@
     :root {
       color-scheme: light dark;
       --bg: #fff; --card: #f3f5f7; --text: #111b21; --muted: #5f6b73; --line: #dde2e6;
-      --accent: #1daa61; --on-accent: #fff; --seg: #fff;
+      --accent: #1daa61; --on-accent: #fff; --seg: #fff; --link: #008069;
     }
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #1f2428; --card: #2a3035; --text: #e9edef; --muted: #9aa5ad; --line: #3a4248; --seg: #1f2428; }
+      :root { --bg: #1f2428; --card: #2a3035; --text: #e9edef; --muted: #9aa5ad; --line: #3a4248; --seg: #1f2428; --link: #21c063; }
     }
     * { box-sizing: border-box; }
     body { margin: 0; width: 360px; padding: 20px; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -33,6 +34,8 @@
     .switch label:hover { background: var(--seg); }
     .switch input:checked + label { background: var(--accent); color: var(--on-accent); }
     .switch input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .feedback { margin: 14px 2px 0; font-size: 13px; }
+    .feedback a { color: var(--link); }
   </style>
 </head>
 <body>
@@ -58,6 +61,7 @@
       </div>
     </fieldset>
   </section>
+  <p class="feedback"><a id="feedback" target="_blank" rel="noopener noreferrer" hidden data-i18n="feedbackLink">Feedback or report a problem</a></p>
   <script src="common-isolated.js"></script>
   <script src="options.js"></script>
 </body>

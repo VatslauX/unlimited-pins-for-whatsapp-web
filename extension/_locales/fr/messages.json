@@ -3,6 +3,10 @@
     "message": "Épinglez plus de 3 discussions dans la liste de WhatsApp Web. Les épingles en plus restent sur cet appareil. Non affilié à WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
   },
+  "feedbackLink": {
+    "message": "Donner un avis ou signaler un problème",
+    "description": "Settings panel: link that opens a new issue on the project's GitHub page"
+  },
   "rowSizeLabel": {
     "message": "Taille des lignes",
     "description": "Settings panel: name of the row size setting"

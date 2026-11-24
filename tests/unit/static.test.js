@@ -99,6 +99,20 @@ test('the settings panel loads only its own script files: no inline script, no r
   assert.doesNotMatch(html, /https?:\/\//i, 'no remote URLs');
 });
 
+test('the feedback link is the only address set from code, and it goes only to the GitHub homepage', () => {
+  const m = JSON.parse(fs.readFileSync(path.join(EXT, 'manifest.json'), 'utf8'));
+  assert.match(m.homepage_url, /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/);
+  for (const [f, s] of Object.entries(src)) {
+    const sets = [...code(s).matchAll(/\.(href|src|action)\s*=(?!=)|setAttribute\(\s*['"](href|src|action)['"]/g)];
+    if (f !== 'options.js') assert.equal(sets.length, 0, `${f} sets an address`);
+    else assert.deepEqual(sets.map(x => x[0].replace(/\s/g, '')), ['.href='], 'options.js sets only feedback.href');
+  }
+  // the issue body carries only versions and language: no storage, pins or chat ids
+  const fb = code(src['options.js']).match(/const body = [\s\S]*?\.join\('\\n'\);/);
+  assert.ok(fb, 'issue body found');
+  assert.doesNotMatch(fb[0], /storage|pins|chat|rowSize|size/i);
+});
+
 test('common-isolated.js is an exact copy of common.js (run npm run sync-common)', () => {
   assert.strictEqual(src['common-isolated.js'], src['common.js']);
 });
