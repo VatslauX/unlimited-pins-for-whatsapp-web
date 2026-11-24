@@ -1,6 +1,6 @@
 # Privacy Policy — Unlimited Pins for WhatsApp Web (unofficial)
 
-_Last updated: 12 November 2026_
+_Last updated: 24 November 2026_
 
 Unlimited Pins for WhatsApp Web is an unofficial browser extension that lets you pin more than 3 chats in WhatsApp Web at `web.whatsapp.com`. It is not affiliated with WhatsApp or Meta.
 
@@ -21,6 +21,7 @@ The extension does not read your messages, contacts' names, or anything else in 
 ## What the extension does not do
 
 - It sends no data anywhere. It makes no network requests at all.
+- The settings panel's feedback link opens a new GitHub issue in a new tab, only when you click it. The extension reads your extension version, Chrome version and language to fill in that issue; it sends nothing itself, and you can edit the issue before you submit it.
 - It does not send your extra pins to WhatsApp. Pins within WhatsApp's own limit are made by WhatsApp itself, as without the extension.
 - It has no analytics, tracking, ads or remote code.
 - It does not run on any website other than `https://web.whatsapp.com/`.

@@ -18,6 +18,21 @@
     if (text) el.textContent = text;
   }
 
+  // Feedback: a new GitHub issue on the project's homepage (manifest homepage_url), with the
+  // extension version, Chrome version and UI language filled in; nothing about the user, their
+  // chats or their settings. Opened only when clicked; the extension itself sends nothing.
+  const feedback = /** @type {HTMLAnchorElement | null} */ (document.getElementById('feedback'));
+  try {
+    const home = new URL(manifest.homepage_url || '');
+    if (feedback && home.protocol === 'https:' && home.hostname === 'github.com') {
+      const chromeVersion = (navigator.userAgent.match(/Chrome\/(\d+)/) || [])[1] || '?';
+      const body = ['**What happened**', '', '', '**What you expected**', '', '', '---',
+        `Extension ${manifest.version} · Chrome ${chromeVersion} · ${chrome.i18n.getUILanguage()}`].join('\n');
+      feedback.href = `${home.origin}${home.pathname.replace(/\/$/, '')}/issues/new?body=${encodeURIComponent(body)}`;
+      feedback.hidden = false;
+    }
+  } catch { /* no usable homepage: no link */ }
+
   /** @param {unknown} size anything stored; not a valid size shows the default */
   function show(size) {
     const input = /** @type {HTMLInputElement | null} */ (document.getElementById(`size-${rowSize(size)}`));

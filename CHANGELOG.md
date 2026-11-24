@@ -1,5 +1,8 @@
 # Release notes
 
+## 0.2.1 — 2026-11-24
+- **Feedback link**: the settings panel has a "Feedback or report a problem" link that opens a new GitHub issue with your extension and Chrome versions filled in. Nothing is sent unless you click it.
+
 ## 0.2.0 — 2026-11-12
 - **Smaller chat rows**: the extension's toolbar icon opens a settings panel where you can show the chat list in Medium or Compact rows instead of WhatsApp's Original size. Open WhatsApp Web tabs change at once, and the choice stays after a reload.
 

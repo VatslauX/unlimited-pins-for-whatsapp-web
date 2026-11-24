@@ -3,6 +3,10 @@
     "message": "Zet meer dan 3 chats vast in de chatlijst van WhatsApp Web. Extra pins blijven op deze computer. Niet gelieerd aan WhatsApp.",
     "description": "Store summary, at most 132 characters; must say it is not affiliated with WhatsApp"
   },
+  "feedbackLink": {
+    "message": "Feedback geven of een probleem melden",
+    "description": "Settings panel: link that opens a new issue on the project's GitHub page"
+  },
   "rowSizeLabel": {
     "message": "Rijgrootte",
     "description": "Settings panel: name of the row size setting"

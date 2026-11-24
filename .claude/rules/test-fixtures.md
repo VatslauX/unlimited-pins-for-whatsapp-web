@@ -26,6 +26,6 @@ paths:
 `tests/e2e/fixtures.js` launches persistent Chromium (`--headless=new`) with the unpacked extension and a fresh profile per test, and routes all `web.whatsapp.com` requests to `tests/fixtures/whatsapp.html` (which loads `fake-whatsapp.js` from `/mock/`). Tests never touch the real WhatsApp.
 
 - `whatsapp({ chats, loadMs, react })` opens a tab and waits for `data-up-status="ready"`. Helpers: `order`, `pinned` (read the rendered list), `menu(page, id)`, `serverCalls(page)`. `page.reload()` reloads with the same profile, so stored pins persist.
-- `options(context)` opens the extension's options page (`chrome-extension://<id>/options.html`); the id is computed from the unpacked path, since there is no background script to read it from. `tests/e2e/rows.spec.js` covers the row size end to end.
+- `options(context)` opens the extension's options page (`chrome-extension://<id>/options.html`); the id is computed from the unpacked path, since there is no background script to read it from. `tests/e2e/rows.spec.js` covers the row size end to end, and `tests/e2e/feedback.spec.js` the feedback link.
 - Wait for conditions with `expect(locator)` and `expect.poll`, not `page.waitForTimeout()`.
 - E2E covers what JSDOM can't: Chrome's real two worlds, `chrome.storage.local`, reloads and tabs. Logic across inputs and races belongs in integration tests.
